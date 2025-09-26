@@ -1,0 +1,39 @@
+package Snapbrief_AI.demo.Controller;
+
+import Snapbrief_AI.demo.Entity.CategoryResult;
+import Snapbrief_AI.demo.Service.CateSumService;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+
+@RestController
+@RequestMapping("/api/cateSum")
+public class CateSumController {
+
+    private final CateSumService cateSumService;
+
+    public CateSumController(CateSumService cateSumService) {
+        this.cateSumService = cateSumService;
+    }
+    @DeleteMapping
+    public ResponseEntity<String> deleteAll() {
+        cateSumService.deleteAll();
+        return ResponseEntity.ok("Deleted all articles");
+    }
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteById(@PathVariable long id) {
+        cateSumService.deleteById(id);
+        return ResponseEntity.ok("Deleted article with id = " + id);
+    }
+    @GetMapping("/all")
+    public ResponseEntity<List<CategoryResult>> getAll() {
+        List<CategoryResult> results = cateSumService.getAll();
+        return ResponseEntity.ok(results);
+    }
+     @GetMapping("/{id}")
+    public ResponseEntity<CategoryResult> getById(@PathVariable long id) {
+        return ResponseEntity.ok(cateSumService.getById(id));
+    }
+}

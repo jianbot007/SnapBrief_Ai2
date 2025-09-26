@@ -1,0 +1,61 @@
+package Snapbrief_AI.demo.Service;
+
+import Snapbrief_AI.demo.DTOs.SendArticleDTO;
+import Snapbrief_AI.demo.DTOs.FastApiResponseDTO;
+import Snapbrief_AI.demo.Entity.Article;
+import Snapbrief_AI.demo.Entity.CategoryResult;
+import Snapbrief_AI.demo.Repo.ArticleRepo;
+import Snapbrief_AI.demo.Repo.CategoryResultRepo;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+import org.springframework.stereotype.Service;
+import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Mono;
+
+@Service
+public class ArticleProcessingService {
+
+    @Autowired
+    private ArticleRepo articleRepository;
+
+    @Autowired
+    private CategoryResultRepo categoryResultRepository;
+
+    private final String FASTAPI_URL = "http://localhost:8000/classify";
+
+    private final WebClient webClient = WebClient.builder().baseUrl(FASTAPI_URL).build();
+
+    public CategoryResult processArticle(Long articleId) {
+        // 1️⃣ Fetch article from DB
+        Article article = articleRepository.findById(articleId)
+                .orElseThrow(() -> new RuntimeException("Article not found: " + articleId));
+
+        // 2️⃣ Map to DTO
+        SendArticleDTO dto = new SendArticleDTO();
+        dto.setArticleId(article.getArticleId());
+        dto.setContent(article.getContent());
+        dto.setSourceUrl(article.getSourceUrl());
+
+        // 3️⃣ Call FastAPI using WebClient
+        Mono<FastApiResponseDTO> responseMono = webClient.post()
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(dto)
+                .retrieve()
+                .bodyToMono(FastApiResponseDTO.class);
+
+        FastApiResponseDTO response = responseMono.block(); // blocking for simplicity
+
+        if (response == null) {
+            throw new RuntimeException("No response from FastAPI");
+        }
+
+        // 4️⃣ Save result
+        CategoryResult result = new CategoryResult();
+        result.setArticle(article);
+        result.setCategory(response.getCategory());
+        result.setSummary(response.getSummary());
+        result.setSourceUrl(response.getSourceUrl());
+
+        return categoryResultRepository.save(result);
+    }
+}

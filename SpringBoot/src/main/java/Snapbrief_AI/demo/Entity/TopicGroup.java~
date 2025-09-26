@@ -1,0 +1,29 @@
+package Snapbrief_AI.demo.Entity;
+
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.time.LocalDateTime;
+
+@Entity
+@Table(name = "topic_groups")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class TopicGroup {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long topicGroupId;
+
+    @ManyToOne
+    @JoinColumn(name = "category_id")
+    private Category category;
+
+    // Store your "powerful text" here
+    @Column(columnDefinition = "TEXT")
+    private String masterText;
+
+    private LocalDateTime createdAt = LocalDateTime.now();
+}

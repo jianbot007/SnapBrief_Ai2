@@ -1,0 +1,42 @@
+package Snapbrief_AI.demo.Controller;
+
+import Snapbrief_AI.demo.Entity.Article;
+import Snapbrief_AI.demo.Service.NewsFetchService;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RestController
+@RequestMapping("/api/news")
+public class NewsFetchController {
+
+    private final NewsFetchService newsFetchService;
+
+    public NewsFetchController(NewsFetchService newsFetchService) {
+        this.newsFetchService = newsFetchService;
+    }
+
+    @PostMapping("/fetch-all")
+    public ResponseEntity<String> fetchAllNews() {
+        newsFetchService.fetchFromAllSources();
+        return ResponseEntity.ok("All news sources fetched and saved successfully.");
+    }
+    @GetMapping("/GetNews")
+   public ResponseEntity<List<Article>> getAllNews() {
+        List<Article> articles = newsFetchService.getAllArticles();
+        if (articles.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(articles);
+    }
+
+            @DeleteMapping
+    public ResponseEntity<String> DeleteNews() {
+        newsFetchService.DeleteAll();
+        return ResponseEntity.ok("All news sources Deleted successfully.");
+    }
+
+    }
+
+
