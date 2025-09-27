@@ -4,9 +4,12 @@ from langchain_google_genai import ChatGoogleGenerativeAI
 import os
 import json
 import re
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # Set your Gemini API key
-os.environ["GOOGLE_API_KEY"] = "Hidden"
+os.environ["GOOGLE_API_KEY"] = os.getenv("GOOGLE_API_KEY")
 
 # Initialize FastAPI app
 app = FastAPI()

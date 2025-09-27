@@ -20,8 +20,10 @@ public class NewsFetchService {
 
     public void fetchFromAllSources() {
         List<String> rssFeeds = List.of(
+                "https://www.thedailystar.net/historical/front-page/rss.xml",
                 "https://www.thedailystar.net/frontpage/rss.xml",
                 "https://www.prothomalo.com/feed/",
+                "https://prod-qt-images.s3.amazonaws.com/production/prothomalo-bangla/feed.xml"
                 "https://www.jagonews24.com/rss/rss.xml"
                 // "https://rss.cnn.com/rss/edition.rss",
                // "https://feeds.bbci.co.uk/news/rss.xml",
@@ -48,6 +50,10 @@ public class NewsFetchService {
     }
     public List<Article> getAllArticles() {
         return articleRepo.findAll();
+    }
+
+    public void DeleteAll(){
+        articleRepo.deleteAll();
     }
 
 }
