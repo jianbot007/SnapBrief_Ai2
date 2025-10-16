@@ -1,0 +1,30 @@
+package Snapbrief_AI.demo.Service;
+
+import Snapbrief_AI.demo.Entity.CategoryResult;
+import Snapbrief_AI.demo.Repo.CategoryResultRepo;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+@Service
+public class CateSumService {
+    @Autowired
+    private CategoryResultRepo categoryResultRepo;
+
+    public void DeleteAll() {
+        categoryResultRepo.deleteAll();
+    }
+
+    public void DeletebyId(long id) {
+        categoryResultRepo.deleteById(id);
+    }
+
+    public List<CategoryResult> getAll() {
+        return categoryResultRepo.findAll();
+    }
+    public CategoryResult getById(long id) {
+        return categoryResultRepo.findById(id).orElse(null);
+    }
+
+}

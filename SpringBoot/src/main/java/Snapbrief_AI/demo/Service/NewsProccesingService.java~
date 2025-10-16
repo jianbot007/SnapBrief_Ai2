@@ -1,0 +1,4 @@
+package Snapbrief_AI.demo.Service;
+
+public class NewsProccesingService {
+}

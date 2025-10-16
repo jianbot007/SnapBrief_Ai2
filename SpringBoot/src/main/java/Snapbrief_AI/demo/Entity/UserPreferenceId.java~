@@ -1,0 +1,4 @@
+package Snapbrief_AI.demo.Entity;
+
+public class UserPreferenceId {
+}

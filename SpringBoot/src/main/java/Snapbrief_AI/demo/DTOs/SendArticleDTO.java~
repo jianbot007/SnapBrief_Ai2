@@ -1,0 +1,21 @@
+package Snapbrief_AI.demo.DTOs;
+
+public class SendArticleDTO {
+        private Long articleId;
+
+        private String content;
+
+        private String sourceUrl;
+
+        public void setArticleId(Long articleId) {
+                this.articleId = articleId;
+        }
+
+        public void setContent(String content) {
+                this.content = content;
+        }
+
+        public void setSourceUrl(String sourceUrl) {
+                this.sourceUrl = sourceUrl;
+        }
+}
